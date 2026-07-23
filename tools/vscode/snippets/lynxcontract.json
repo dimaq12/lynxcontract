@@ -1,0 +1,149 @@
+{
+  "LynxContract behavioral contract": {
+    "prefix": "lynx-contract",
+    "description": "//@contract: block — pre/post/raises/assigns (§4)",
+    "body": [
+      "//@contract:",
+      "//@  intent: >",
+      "//@    ${1:why this unit exists and when to use it}",
+      "//@  rules:",
+      "//@    - ${2:BUSINESS LOGIC codegen must honor}",
+      "//@  pre: ${3:condition}",
+      "//@  post: ${4:condition}",
+      "//@  raises: ${5:ExceptionType} if ${6:predicate}",
+      "//@  assigns: [${7}]"
+    ]
+  },
+  "LynxContract module contract": {
+    "prefix": "lynx-module",
+    "description": "//@module: block — layer/depends/restrictions (§12)",
+    "body": [
+      "//@module:",
+      "//@  layer: ${1:adapter}",
+      "//@  package: ${2:com.example}",
+      "//@  depends: [${3}]",
+      "//@  exposes: [${4}]",
+      "//@  restrictions: [${5}]",
+      "//@  doc: \"${6:rationale / ADR link}\""
+    ]
+  },
+  "LynxContract messaging contract": {
+    "prefix": "lynx-messaging",
+    "description": "//@messaging: block — Kafka topics + error routing (§13, §18)",
+    "body": [
+      "//@messaging:",
+      "//@  consumes:",
+      "//@    topic: ${1:provider}.${2:domain}.command.${3:action}",
+      "//@    as: ${4:Command}",
+      "//@    format: ${5|envelope-json,avro,json|}",
+      "//@    group: ${6:consumer-group}",
+      "//@    key: ${7:partitionKeyField}",
+      "//@  produces:",
+      "//@    - topic: ${2:domain}.event.${8:name}",
+      "//@      as: ${9:Event}",
+      "//@      format: ${5|envelope-json,avro,json|}",
+      "//@    - topic: ${2:domain}.event.${8:name}-failed",
+      "//@      as: ${9:Event}Failed",
+      "//@      when: raises PermanentException",
+      "//@  ordering: ${10|per-key,per-partition,none|}",
+      "//@  idempotent: ${11|true,false|}",
+      "//@  errors:",
+      "//@    TransientException: retry-in-process",
+      "//@    RetryableException: retry-topic",
+      "//@    PermanentException: failed-event + dlq",
+      "//@  dlq: ${1:provider}.${2:domain}.dlq",
+      "//@  headers: [acme-correlation-id, acme-device-identifier]"
+    ]
+  },
+  "LynxContract data-flow contract": {
+    "prefix": "lynx-flow",
+    "description": "//@flow: block — source → steps → sink (§14)",
+    "body": [
+      "//@flow:",
+      "//@  from: topic ${1:source.topic}",
+      "//@  through:",
+      "//@    - ${2:UnwrapEnvelopeProcessor}",
+      "//@    - ${3:mapToCoreRequest}",
+      "//@    - rest ${4:POST} ${5:api} ${6:/path}",
+      "//@  to: topic ${7:sink.topic}",
+      "//@  privacy: ${8|public,internal,pii,phi|}"
+    ]
+  },
+  "LynxContract module graph": {
+    "prefix": "lynx-graph",
+    "description": "//@graph: block — file inventory + deps + dataflow (§12.1)",
+    "body": [
+      "//@graph: ${1:module.name}",
+      "//@  files:",
+      "//@    - ${2:internal/File.kt}   realizes: [${3:contracts/x#unit}]",
+      "//@  depends:",
+      "//@    ${2:internal/File.kt}: [${4}]",
+      "//@  dataflow: |",
+      "//@    ```mermaid",
+      "//@    flowchart LR",
+      "//@      IN[(${5:source})] --> R[${6:Unit}] --> OUT[(${7:sink})]",
+      "//@    ```",
+      "//@  vanilla: \"${8:what the module is without contracts/}\""
+    ]
+  },
+  "LynxContract observability contract": {
+    "prefix": "lynx-observability",
+    "description": "//@observability: block — mandated log fields + outcome enum (§14.2)",
+    "body": [
+      "//@observability:",
+      "//@  operations: [${1:domain.verb}]",
+      "//@  logFields:",
+      "//@    - operation",
+      "//@    - correlationId",
+      "//@    - outcome",
+      "//@    - duration_ms",
+      "//@  outcome: [${2:ok, validation_failed, adapter_failed}]",
+      "//@  mustNotLog: [${3:rawSecrets}]"
+    ]
+  },
+  "LynxContract plugin registry contract": {
+    "prefix": "lynx-plugin",
+    "description": "//@plugin: block — uniform interface + registry map (§12.2)",
+    "body": [
+      "//@plugin: ${1:registry.name}",
+      "//@  interface: ${2:fun handler(ctx: Ctx): Result}",
+      "//@  registry: ${3:providers/Registry.kt}",
+      "//@  key: ${4:selector}",
+      "//@  members: [${5}]",
+      "//@  onMissing: raise IllegalStateException(\"${6:not found}\")",
+      "//@  addModule: |",
+      "//@    1. create ${7:providers/<key>/Impl.kt} implementing `interface`",
+      "//@    2. add one entry to registry",
+      "//@    3. add <key> to `members` here"
+    ]
+  },
+  "LynxContract contract-first module spec": {
+    "prefix": "lynx-contract-first",
+    "description": "Standalone contract-first spec — no code yet (§8)",
+    "body": [
+      "//@module:",
+      "//@  layer: ${1:adapter}",
+      "//@  package: ${2:com.example.internal}",
+      "//@  depends: [${3}]",
+      "//@",
+      "//@contract: ${4:Service.handle}",
+      "//@  lang: ${5|kotlin,java|}",
+      "//@  signature: ${6:fun handle(command: Cmd): Result}",
+      "//@  pre: ${7:condition}",
+      "//@  post: ${8:condition}",
+      "//@  assigns: []",
+      "//@  raises:",
+      "//@    PermanentException: ${9:predicate}",
+      "//@  calls: [${10:collaborator.method}]",
+      "//@  realizedBy: [${11:internal/Service.kt}]"
+    ]
+  },
+  "LynxContract archetype stub header": {
+    "prefix": "lynx-stub-header",
+    "description": "Archetype stub header — TARGET + REALIZATION (§20.1)",
+    "body": [
+      "TARGET: ${1:path/with/{{Fills}}.kt}",
+      "REALIZATION: ${2|generate,copy-verbatim,n/a|}${3: <source path>}"
+    ]
+  }
+}

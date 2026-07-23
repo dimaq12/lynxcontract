@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "LynxContract",
+  "scopeName": "source.lynxcontract",
+  "patterns": [
+    { "include": "lynxcontract.injection#lynx-line" },
+    {
+      "match": "^\\s*(TARGET|REALIZATION|MULTIPLIER)\\s*(:)\\s*(.*)$",
+      "captures": {
+        "1": { "name": "keyword.control.archetype.lynxcontract" },
+        "2": { "name": "punctuation.separator.key-value.lynxcontract" },
+        "3": { "name": "string.unquoted.path.lynxcontract" }
+      }
+    },
+    {
+      "match": "\\{\\{[A-Za-z][A-Za-z0-9_]*\\}\\}",
+      "name": "constant.other.placeholder.fill.lynxcontract"
+    },
+    {
+      "match": "^\\s*#.*$",
+      "name": "comment.line.number-sign.lynxcontract"
+    }
+  ]
+}

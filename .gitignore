@@ -1,0 +1,7 @@
+node_modules/
+out/
+*.vsix
+!tools/vscode/lynxcontract-vscode-0.2.0.vsix
+.DS_Store
+.claude/
+*.tsbuildinfo

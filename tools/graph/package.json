@@ -1,0 +1,20 @@
+{
+  "name": "lynx-graph",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "core",
+    "indexer",
+    "mcp-server"
+  ],
+  "scripts": {
+    "build": "tsc -b core indexer mcp-server",
+    "test": "npm run build && node --test \"indexer/out/test/*.test.js\" \"mcp-server/out/test/*.test.js\"",
+    "index:fixtures": "npm run build && node indexer/out/cli.js --template fixtures/template --manifest fixtures/instantiations/acme-corelab.md --generated fixtures/generated/acme-corelab --reports fixtures/reports --out /tmp/lynx-fixtures.db",
+    "serve:fixtures": "node mcp-server/out/server.js --db /tmp/lynx-fixtures.db"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0"
+  }
+}
