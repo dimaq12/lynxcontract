@@ -1,0 +1,124 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "lynxcontract.injection",
+  "injectionSelector": "L:source.kotlin -string -comment.block, L:source.kt -string -comment.block, L:source.java -string -comment.block, L:text.html.markdown, L:source.go -string -comment.block, L:source.python -string, L:source.rust -string -comment.block",
+  "patterns": [
+    {
+      "include": "#lynx-line"
+    }
+  ],
+  "repository": {
+    "lynx-line": {
+      "begin": "^\\s*(//@|#@)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.marker.lynxcontract"
+        }
+      },
+      "end": "$",
+      "name": "meta.annotation.lynxcontract",
+      "patterns": [
+        {
+          "include": "#lynx-content"
+        }
+      ]
+    },
+    "lynx-content": {
+      "patterns": [
+        {
+          "match": "\\G(end)\\b",
+          "name": "keyword.control.end.lynxcontract"
+        },
+        {
+          "match": "\\G(contract|module|messaging|flow|graph|observability|plugin)\\s*(:)\\s*([\\w./#-]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.block.lynxcontract"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.lynxcontract"
+            },
+            "3": {
+              "name": "entity.name.function.lynxcontract"
+            }
+          }
+        },
+        {
+          "match": "\\G\\s*(-)(?=\\s)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.list.begin.lynxcontract keyword.operator.list.lynxcontract"
+            }
+          }
+        },
+        {
+          "match": "(#.*)$",
+          "name": "comment.line.number-sign.lynxcontract"
+        },
+        {
+          "match": "\\{\\{[A-Za-z][A-Za-z0-9_]*\\}\\}",
+          "name": "constant.other.placeholder.fill.lynxcontract"
+        },
+        {
+          "match": "<property:[^>]+>",
+          "name": "constant.other.placeholder.property.lynxcontract"
+        },
+        {
+          "match": "\\{\\{(?:kt|java):[^}]*\\}\\}",
+          "name": "string.interpolated.verbatim.lynxcontract"
+        },
+        {
+          "match": "\\b(TARGET|REALIZATION|MULTIPLIER)\\b",
+          "name": "keyword.control.archetype.lynxcontract"
+        },
+        {
+          "match": "([A-Za-z_][\\w-]*)\\s*(:)(?=\\s|$)",
+          "captures": {
+            "1": {
+              "name": "support.type.property-name.lynxcontract"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.lynxcontract"
+            }
+          }
+        },
+        {
+          "match": "\"[^\"]*\"",
+          "name": "string.quoted.double.lynxcontract"
+        },
+        {
+          "match": "'[^']*'",
+          "name": "string.quoted.single.lynxcontract"
+        },
+        {
+          "match": "`[^`]+`",
+          "name": "markup.inline.raw.symbol-ref.lynxcontract"
+        },
+        {
+          "match": "\\b(envelope-json|avro|per-key|per-partition|retry-in-process|retry-topic|failed-event|dlq|drop|true|false|json|none|pii|phi|public|internal)\\b",
+          "name": "constant.language.lynxcontract"
+        },
+        {
+          "match": "\\b(old|result|forall|exists|raises|if|in|and|or|not|len|abstract)\\b",
+          "name": "keyword.other.expression.lynxcontract"
+        },
+        {
+          "match": "\\b(topic|route|rest|registry|schema|db|cache|file|queue)\\b(?!\\s*:)",
+          "name": "storage.type.node.lynxcontract"
+        },
+        {
+          "match": "==|!=|<=|>=|&&|\\|\\||!in\\b|\\?:|\\?\\.|->|\\.\\.",
+          "name": "keyword.operator.lynxcontract"
+        },
+        {
+          "match": "\\b\\d+(\\.\\d+)?\\b",
+          "name": "constant.numeric.lynxcontract"
+        },
+        {
+          "match": "~(?=\\s)",
+          "name": "keyword.operator.disable-check.lynxcontract"
+        }
+      ]
+    }
+  }
+}

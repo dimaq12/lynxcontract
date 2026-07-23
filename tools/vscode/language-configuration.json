@@ -1,0 +1,23 @@
+{
+  "comments": {
+    "lineComment": "#"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"" },
+    { "open": "{{", "close": "}}" }
+  ],
+  "folding": {
+    "markers": {
+      "start": "^\\s*//@(contract|module|messaging|flow|graph|observability|plugin):",
+      "end": "^\\s*//@end\\b"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "name": "lynxcontract-vscode",
+  "displayName": "LynxContract",
+  "description": "Language support for LynxContract v1.3 — contract annotation language for Kotlin & Java (//@ blocks): highlighting, snippets, completion, hover, navigation and workspace lints.",
+  "version": "0.3.1",
+  "publisher": "dimaq12",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "main": "./client/out/extension.js",
+  "activationEvents": [
+    "onLanguage:kotlin",
+    "onLanguage:java",
+    "onLanguage:markdown",
+    "onLanguage:go",
+    "onLanguage:python",
+    "onLanguage:rust",
+    "workspaceContains:**/*.lynx.*"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "lynxcontract",
+        "aliases": [
+          "LynxContract"
+        ],
+        "extensions": [
+          ".lynx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "lynxcontract",
+        "scopeName": "source.lynxcontract",
+        "path": "./syntaxes/lynxcontract.tmLanguage.json"
+      },
+      {
+        "scopeName": "lynxcontract.injection",
+        "path": "./syntaxes/lynxcontract.injection.tmLanguage.json",
+        "injectTo": [
+          "source.kotlin",
+          "source.kt",
+          "source.java",
+          "text.html.markdown",
+          "source.go",
+          "source.python",
+          "source.rust"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "kotlin",
+        "path": "./snippets/lynxcontract.json"
+      },
+      {
+        "language": "java",
+        "path": "./snippets/lynxcontract.json"
+      },
+      {
+        "language": "markdown",
+        "path": "./snippets/lynxcontract.json"
+      },
+      {
+        "language": "lynxcontract",
+        "path": "./snippets/lynxcontract.json"
+      }
+    ],
+    "configuration": {
+      "title": "LynxContract",
+      "properties": {
+        "lynxcontract.acmeProfile": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enforce the example Acme profile lints (§18): topic naming templates, provider-prefix asymmetry, DLQ conventions. Off by default — the core grammar knows no product; enable it (or ship your own profile) per workspace."
+        },
+        "lynxcontract.unknownKeySeverity": {
+          "type": "string",
+          "enum": [
+            "warning",
+            "information",
+            "off"
+          ],
+          "default": "warning",
+          "description": "Severity for keys not in the v1.3 grammar (spec §19: unknown keys are ignored with a warning)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -b client server",
+    "watch": "tsc -b -w client server",
+    "test": "npm run compile && node --test \"server/out/test/*.test.js\"",
+    "package": "npm run compile && node scripts/vsce-pack.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,3 @@
+# fictional org ownership (Acme)
+telemetry/   @acme/telemetry-team
+notify/     @acme/notify-team @acme/platform-leads
